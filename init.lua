@@ -13,7 +13,7 @@ local M = {}
 
 --- Path to or the name of the browser executable to show exported HTML files in.
 -- The default value is 'firefox'.
-M.browser = not WIN32 and 'firefox' or 'start ""'
+M.browser = WIN32 and 'start ""' or OSX and 'open' or LINUX and 'firefox'
 
 --- Whether or not to show line numbers in exported output.
 -- The default value is `true`.
@@ -32,7 +32,7 @@ end
 function M.to_html(filename, out_filename)
 	-- Prompt the user for the HTML file to export to, if necessary.
 	filename = filename or buffer.filename or ''
-	local dir, name = filename:match('^(.-[/\\]?)([^/\\]-)%.?[^.]*$')
+	local dir, name = filename:match('^(.-)[/\\]?([^/\\]-)%.?[^.]*$')
 	out_filename = out_filename or
 		ui.dialogs.save{title = _L['Save File'], dir = dir, file = name .. '.html'}
 	if not out_filename then return end
